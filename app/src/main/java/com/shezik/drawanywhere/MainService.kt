@@ -27,6 +27,7 @@ import android.graphics.Point
 import android.os.Build
 import android.os.IBinder
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -110,6 +111,28 @@ class MainService : Service() {
             setContent { DrawToolbar(viewModel = viewModel) }
         }
         toolbarLifecycleOwner.attachTo(toolbarView)
+
+        // Wake canvas up whenever S-Pen hovers or touches the toolbar
+        val stylusWakeAction: (MotionEvent) -> Unit = { event ->
+            val toolType = if (event.pointerCount > 0) event.getToolType(0) else MotionEvent.TOOL_TYPE_UNKNOWN
+            if (toolType == MotionEvent.TOOL_TYPE_STYLUS || toolType == MotionEvent.TOOL_TYPE_ERASER) {
+                if (viewModel.uiState.value.canvasPassthrough) {
+                    viewModel.setCanvasPassthrough(false)
+                }
+            }
+        }
+        toolbarView.setOnHoverListener { _, event ->
+            stylusWakeAction(event)
+            false
+        }
+        toolbarView.setOnTouchListener { _, event ->
+            stylusWakeAction(event)
+            false
+        }
+        toolbarView.setOnGenericMotionListener { _, event ->
+            stylusWakeAction(event)
+            false
+        }
 
         val toolbarParams = LayoutParams(
             LayoutParams.WRAP_CONTENT,

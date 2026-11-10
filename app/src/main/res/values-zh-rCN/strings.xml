@@ -22,6 +22,7 @@
     <string name="clear_on_hiding_canvas">隐藏画布时清空</string>
     <string name="canvas_visible_on_start">启动时显示画布</string>
     <string name="finger_drawing">手指绘制</string>
+    <string name="stylus_auto_passthrough">S-Pen 离开悬停时自动透传</string>
     <string name="quit">退出</string>
     <string name="hide_canvas">隐藏画布</string>
     <string name="show_canvas">显示画布</string>

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 fun DraggableToolbarCard(
     modifier: Modifier = Modifier,
     haptics: HapticFeedback,
+    isPassthroughActive: Boolean = false,
     onPositionChange: (Offset) -> Unit,
     onPositionSaved: () -> Unit,
     onToolbarInteracted: () -> Unit,
@@ -59,6 +60,7 @@ fun DraggableToolbarCard(
             },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         shape = CircleShape,
+        border = if (isPassthroughActive) androidx.compose.foundation.BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.9f)
         )

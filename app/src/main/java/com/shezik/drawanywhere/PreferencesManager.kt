@@ -44,6 +44,7 @@ class PreferencesManager(private val context: Context) {
         val AUTO_CLEAR_CANVAS = booleanPreferencesKey("auto_clear_canvas")
         val VISIBLE_ON_START = booleanPreferencesKey("visible_on_start")
         val FINGER_DRAWING_ENABLED = booleanPreferencesKey("finger_drawing_enabled")
+        val STYLUS_AUTO_PASSTHROUGH = booleanPreferencesKey("stylus_auto_passthrough")
         val RECENT_COLORS = stringPreferencesKey("recent_colors")
 
         // Pen-specific keys (for saving multiple pens)
@@ -97,6 +98,7 @@ class PreferencesManager(private val context: Context) {
 
         val visibleOnStart = preferences[PreferencesKeys.VISIBLE_ON_START] ?: defaultUiState.visibleOnStart
         val fingerDrawingEnabled = preferences[PreferencesKeys.FINGER_DRAWING_ENABLED] ?: defaultUiState.fingerDrawingEnabled
+        val stylusAutoPassthrough = preferences[PreferencesKeys.STYLUS_AUTO_PASSTHROUGH] ?: defaultUiState.stylusAutoPassthrough
         val recentColorsStr = preferences[PreferencesKeys.RECENT_COLORS] ?: ""
         val recentColors = if (recentColorsStr.isNotEmpty())
             recentColorsStr.split(",").mapNotNull { s ->
@@ -114,6 +116,7 @@ class PreferencesManager(private val context: Context) {
 
             visibleOnStart = visibleOnStart,
             fingerDrawingEnabled = fingerDrawingEnabled,
+            stylusAutoPassthrough = stylusAutoPassthrough,
             recentColors = recentColors,
             canvasVisible = visibleOnStart,
             firstDrawerOpen = visibleOnStart
@@ -127,6 +130,7 @@ class PreferencesManager(private val context: Context) {
             preferences[PreferencesKeys.AUTO_CLEAR_CANVAS] = uiState.autoClearCanvas
             preferences[PreferencesKeys.VISIBLE_ON_START] = uiState.visibleOnStart
             preferences[PreferencesKeys.FINGER_DRAWING_ENABLED] = uiState.fingerDrawingEnabled
+            preferences[PreferencesKeys.STYLUS_AUTO_PASSTHROUGH] = uiState.stylusAutoPassthrough
             preferences[PreferencesKeys.RECENT_COLORS] = uiState.recentColors.joinToString(",") { it.toArgb().toString(16).padStart(8, '0') }
 
             // Save each pen's configuration

@@ -31,6 +31,7 @@ class PreferencesPersistenceTest {
         assertEquals(original.currentPenType, restored.currentPenType)
         assertEquals(original.toolbarOrientation, restored.toolbarOrientation)
         assertEquals(original.firstDrawerOpen, restored.firstDrawerOpen)
+        assertEquals(original.stylusAutoPassthrough, restored.stylusAutoPassthrough)
         // Note: canvasPassthrough is NOT persisted (transient state)
     }
 
@@ -53,6 +54,7 @@ class PreferencesPersistenceTest {
 
         assertTrue(state.canvasVisible)
         assertFalse(state.canvasPassthrough)
+        assertTrue(state.stylusAutoPassthrough)
         assertEquals(PenType.Pen, state.currentPenType)
         assertEquals(ToolbarOrientation.HORIZONTAL, state.toolbarOrientation)
     }

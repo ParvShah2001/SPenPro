@@ -66,6 +66,7 @@ Since v2.0, AI‑generated content has been introduced. The decision was finally
 - Quick Settings tile to toggle the drawing service — tap again to close
 - Opening the app a second time stops the service; dragging the toolbar to the bottom of the screen also closes it
 - Hover circle shows brush preview when using finger or stylus
+- Auto-passthrough on S-Pen hover exit — automatically enters passthrough mode when S-Pen leaves screen hover range so fingers can navigate underlying apps; hovering or touching the toolbar with the S-Pen instantly wakes up drawing
 
 ## ✨ Tutorial
 - **Move the toolbar** — long‑press and drag it anywhere.

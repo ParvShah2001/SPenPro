@@ -49,6 +49,7 @@ data class UiState(
     val autoClearCanvas: Boolean = false,
     val visibleOnStart: Boolean = true,
     val fingerDrawingEnabled: Boolean = true,
+    val stylusAutoPassthrough: Boolean = true,
     val recentColors: List<Color> = emptyList(),
 
     val currentPenType: PenType = PenType.Pen,
@@ -301,6 +302,9 @@ class DrawViewModel(
 
     fun setVisibleOnStart(state: Boolean) =
         _uiState.update { it.copy(visibleOnStart = state) }
+
+    fun setStylusAutoPassthrough(state: Boolean) =
+        _uiState.update { it.copy(stylusAutoPassthrough = state) }
 
     fun setFingerDrawingEnabled(state: Boolean) =
         _uiState.update { it.copy(fingerDrawingEnabled = state) }

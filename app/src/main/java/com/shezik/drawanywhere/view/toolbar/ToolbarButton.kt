@@ -76,6 +76,8 @@ internal fun createAllToolbarButtons(
     onChangeVisibleOnStart: (Boolean) -> Unit,
     fingerDrawingEnabled: Boolean,
     onChangeFingerDrawingEnabled: (Boolean) -> Unit,
+    stylusAutoPassthrough: Boolean = true,
+    onChangeStylusAutoPassthrough: (Boolean) -> Unit = {},
     onCycleLockMode: () -> Unit,
     lockMode: LockMode,
     onQuitApplication: () -> Unit
@@ -164,6 +166,8 @@ internal fun createAllToolbarButtons(
                 onChangeVisibleOnStart = onChangeVisibleOnStart,
                 fingerDrawingEnabled = fingerDrawingEnabled,
                 onChangeFingerDrawingEnabled = onChangeFingerDrawingEnabled,
+                stylusAutoPassthrough = stylusAutoPassthrough,
+                onChangeStylusAutoPassthrough = onChangeStylusAutoPassthrough,
                 onQuitApplication = onQuitApplication
             ) },
             { AboutScreen() }

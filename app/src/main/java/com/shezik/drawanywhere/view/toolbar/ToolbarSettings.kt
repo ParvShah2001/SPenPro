@@ -27,6 +27,8 @@ internal fun ToolbarControls(
     onChangeVisibleOnStart: (Boolean) -> Unit,
     fingerDrawingEnabled: Boolean,
     onChangeFingerDrawingEnabled: (Boolean) -> Unit,
+    stylusAutoPassthrough: Boolean,
+    onChangeStylusAutoPassthrough: (Boolean) -> Unit,
     onQuitApplication: () -> Unit
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
@@ -67,6 +69,11 @@ internal fun ToolbarControls(
             label = stringResource(R.string.finger_drawing),
             isChecked = fingerDrawingEnabled,
             onCheckedChange = onChangeFingerDrawingEnabled
+        )
+        CheckboxControl(
+            label = stringResource(R.string.stylus_auto_passthrough),
+            isChecked = stylusAutoPassthrough,
+            onCheckedChange = onChangeStylusAutoPassthrough
         )
         Button(
             onClick = onQuitApplication,

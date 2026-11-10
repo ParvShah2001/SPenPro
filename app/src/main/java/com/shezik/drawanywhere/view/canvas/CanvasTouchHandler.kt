@@ -16,6 +16,8 @@ with this program. If not, see <https://www.gnu.org/licenses/>.
 
 package com.shezik.drawanywhere.view.canvas
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.MotionEvent
 import androidx.compose.ui.geometry.Offset
@@ -79,6 +81,43 @@ class CanvasTouchHandler(
     // ═══════════════════════════════════════════════════════════════
 
     private val TAG = "DrawTouch"
+
+    companion object {
+        const val STYLUS_HOVER_EXIT_GRACE_PERIOD_MS = 150L
+        const val STYLUS_LIFT_FALLBACK_DELAY_MS = 350L
+    }
+
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private val autoPassthroughRunnable = Runnable {
+        if (viewModel.uiState.value.stylusAutoPassthrough && !viewModel.uiState.value.canvasPassthrough) {
+            Log.d(TAG, "  → S-Pen left hover range: activating auto-passthrough")
+            viewModel.setCanvasPassthrough(true)
+        }
+    }
+
+    private fun isStylusTool(toolType: Int): Boolean =
+        toolType == MotionEvent.TOOL_TYPE_STYLUS || toolType == MotionEvent.TOOL_TYPE_ERASER
+
+    private fun hasStylusPointer(event: MotionEvent): Boolean {
+        for (i in 0 until event.pointerCount) {
+            if (isStylusTool(event.getToolType(i))) return true
+        }
+        return false
+    }
+
+    private fun cancelAutoPassthrough() {
+        mainHandler.removeCallbacks(autoPassthroughRunnable)
+    }
+
+    private fun scheduleAutoPassthrough(delayMs: Long) {
+        if (!viewModel.uiState.value.stylusAutoPassthrough || viewModel.uiState.value.canvasPassthrough) return
+        mainHandler.removeCallbacks(autoPassthroughRunnable)
+        mainHandler.postDelayed(autoPassthroughRunnable, delayMs)
+    }
+
+    fun destroy() {
+        cancelAutoPassthrough()
+    }
 
     private var activePointerId: Int = -1
     // strokePending XOR strokeInProgress: pending during finger debounce (50ms),
@@ -188,6 +227,28 @@ class CanvasTouchHandler(
 
         if (event.actionMasked != MotionEvent.ACTION_MOVE || event.pointerCount >= 2) {
             logPointers(event, eventActionName(event.actionMasked))
+        }
+
+        val isStylus = hasStylusPointer(event)
+        if (isStylus) {
+            when (event.actionMasked) {
+                MotionEvent.ACTION_HOVER_ENTER,
+                MotionEvent.ACTION_HOVER_MOVE,
+                MotionEvent.ACTION_DOWN,
+                MotionEvent.ACTION_MOVE -> {
+                    cancelAutoPassthrough()
+                    if (viewModel.uiState.value.canvasPassthrough) {
+                        viewModel.setCanvasPassthrough(false)
+                    }
+                }
+                MotionEvent.ACTION_HOVER_EXIT -> {
+                    scheduleAutoPassthrough(STYLUS_HOVER_EXIT_GRACE_PERIOD_MS)
+                }
+                MotionEvent.ACTION_UP,
+                MotionEvent.ACTION_CANCEL -> {
+                    scheduleAutoPassthrough(STYLUS_LIFT_FALLBACK_DELAY_MS)
+                }
+            }
         }
 
         // ① Multi-touch active → dispatch
@@ -324,6 +385,11 @@ class CanvasTouchHandler(
             strokeInProgress = true
             strokePending = false
         } else {
+            if (viewModel.uiState.value.stylusAutoPassthrough && !viewModel.uiState.value.canvasPassthrough) {
+                Log.d(TAG, "  → finger DOWN while stylus inactive: activating auto-passthrough")
+                viewModel.setCanvasPassthrough(true)
+                return
+            }
             if (!fingerDrawingEnabled()) {
                 Log.d(TAG, "  → finger DOWN: ignored (finger drawing disabled)")
                 return

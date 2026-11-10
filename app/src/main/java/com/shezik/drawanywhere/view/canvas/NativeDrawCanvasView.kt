@@ -209,6 +209,7 @@ class NativeDrawCanvasView(
         super.onDetachedFromWindow()
         viewportScope?.cancel()
         removeCallbacks(null)
+        touchHandler.destroy()
     }
 
 }

@@ -21,6 +21,7 @@
     <string name="clear_on_hiding_canvas">Clear canvas on hide</string>
     <string name="canvas_visible_on_start">Open canvas on start</string>
     <string name="finger_drawing">Finger drawing</string>
+    <string name="stylus_auto_passthrough">Auto-navigate on S-Pen hover exit</string>
     <string name="quit">Quit</string>
     <string name="hide_canvas">Hide canvas</string>
     <string name="show_canvas">Show canvas</string>

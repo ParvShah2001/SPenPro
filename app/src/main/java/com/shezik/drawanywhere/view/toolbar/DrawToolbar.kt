@@ -63,6 +63,8 @@ fun DrawToolbar(
         onChangeVisibleOnStart = viewModel::setVisibleOnStart,
         fingerDrawingEnabled = uiState.fingerDrawingEnabled,
         onChangeFingerDrawingEnabled = viewModel::setFingerDrawingEnabled,
+        stylusAutoPassthrough = uiState.stylusAutoPassthrough,
+        onChangeStylusAutoPassthrough = viewModel::setStylusAutoPassthrough,
         onCycleLockMode = viewModel::cycleLockMode,
         lockMode = lockMode,
         onQuitApplication = viewModel::quitApplication
@@ -81,6 +83,7 @@ fun DrawToolbar(
                     .verticalScroll(vScrollState)
                     .padding(Spacing.xs),
                 haptics = haptics,
+                isPassthroughActive = uiState.canvasPassthrough,
                 onPositionChange = viewModel::updateToolbarPosition,
                 onPositionSaved = viewModel::saveToolbarPosition,
                 onToolbarInteracted = viewModel::resetToolbarTimer,
